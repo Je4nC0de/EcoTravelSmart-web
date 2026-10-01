@@ -1,9 +1,5 @@
 # EcoTravelSmart - Proyecto Java Web
 
-## Versión Jakarta EE 10 (alineado con el ejemplo del profesor)
-
-Este proyecto fue actualizado para seguir el mismo patrón del ejemplo visto en clase
-(`Proyect-JavaWeb1`):
 
 - `pom.xml` usa el perfil completo **jakarta.jakartaee-api 10.0.0** (en vez de solo servlet-api + JSTL).
 - `web.xml` en versión **6.0** (Jakarta EE 10), con `session-timeout` configurado.
@@ -57,12 +53,4 @@ EcoTravelSmart/
     ├── registroUsuarios.jsp
     ├── adminProductos.jsp
     └── registroProductos.jsp
-```
 
-## Notas
-
-- Todas las vistas (JSP) siguen siendo SOLO navegación y formularios (no funcional aún).
-- `beans.xml` y `persistence.xml` están vacíos/listos; se completan cuando se agregue
-  inyección de dependencias real y conexión a base de datos.
-- El recurso REST es solo un "ping" de ejemplo, como el del profesor — se reemplaza
-  por recursos reales (UsuarioResource, ProductoResource) en la siguiente entrega.
