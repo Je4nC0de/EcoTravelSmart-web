@@ -1,0 +1,211 @@
+/* ===================== EcoTravelSmart - Estilos generales ===================== */
+:root {
+    --verde-oscuro: #1b4332;
+    --verde-medio: #2d6a4f;
+    --verde-claro: #74c69d;
+    --verde-pastel: #d8f3dc;
+    --blanco: #ffffff;
+    --gris-texto: #333333;
+    --gris-claro: #f4f4f4;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: var(--gris-claro);
+    color: var(--gris-texto);
+}
+
+/* ===== Header / Navbar ===== */
+header.main-header {
+    background-color: var(--verde-oscuro);
+    color: var(--blanco);
+    padding: 0;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 12px 20px;
+}
+
+.navbar .logo {
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--verde-pastel);
+    text-decoration: none;
+}
+
+.navbar nav a {
+    color: var(--blanco);
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 15px;
+    transition: color 0.2s ease-in-out;
+}
+
+.navbar nav a:hover {
+    color: var(--verde-claro);
+}
+
+/* ===== Contenedor principal ===== */
+.contenedor {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* ===== Banner / Hero ===== */
+.banner {
+    width: 100%;
+    border-radius: 8px;
+    display: block;
+    margin-bottom: 25px;
+}
+
+.hero-text {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.hero-text h1 {
+    color: var(--verde-oscuro);
+    margin-bottom: 5px;
+}
+
+.hero-text p {
+    color: #555;
+    font-size: 17px;
+}
+
+/* ===== Tarjetas de presentación (index) ===== */
+.tarjetas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.tarjeta {
+    background: var(--blanco);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.tarjeta h3 {
+    color: var(--verde-medio);
+    margin-top: 0;
+}
+
+/* ===== Formularios ===== */
+form.formulario {
+    background: var(--blanco);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 25px 30px;
+    max-width: 550px;
+    margin: 0 auto;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+form.formulario h2 {
+    color: var(--verde-oscuro);
+    margin-top: 0;
+    text-align: center;
+}
+
+.campo {
+    margin-bottom: 16px;
+}
+
+.campo label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.campo textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Los botones usan clases de Bootstrap (btn, btn-primary, btn-secondary,
+   btn-danger). Aquí solo le damos el tema verde "eco" a btn-primary. */
+.btn-primary {
+    background-color: var(--verde-medio);
+    border-color: var(--verde-medio);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--verde-oscuro);
+    border-color: var(--verde-oscuro);
+}
+
+.acciones-form {
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* ===== Tablas de administración ===== */
+table.tabla-admin {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--blanco);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+table.tabla-admin th {
+    background-color: var(--verde-medio);
+    color: var(--blanco);
+    padding: 10px;
+    text-align: left;
+}
+
+table.tabla-admin td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+table.tabla-admin tr:hover {
+    background-color: var(--verde-pastel);
+}
+
+.barra-admin {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* ===== Footer ===== */
+footer.main-footer {
+    background-color: var(--verde-oscuro);
+    color: var(--verde-pastel);
+    text-align: center;
+    padding: 18px;
+    margin-top: 40px;
+    font-size: 14px;
+}
