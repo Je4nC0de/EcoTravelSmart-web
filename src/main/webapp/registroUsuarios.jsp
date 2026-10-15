@@ -36,13 +36,13 @@
         </div>
 
         <div class="mb-3">
-            <label for="correo" class="form-label">Correo electrónico</label>
+            <label for="correo" class="form-label">Correo electronico</label>
             <input type="email" id="correo" name="correo" class="form-control" placeholder="ejemplo@correo.com"
                    value="<%= (usuarioEditar != null) ? usuarioEditar.getCorreo() : "" %>" required>
         </div>
 
         <div class="mb-3">
-            <label for="telefono" class="form-label">Teléfono</label>
+            <label for="telefono" class="form-label">Telefono</label>
             <input type="text" id="telefono" name="telefono" class="form-control" placeholder="Número de contacto"
                    value="<%= (usuarioEditar != null) ? usuarioEditar.getTelefono() : "" %>">
         </div>
@@ -54,7 +54,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="password" class="form-label">Contraseña</label>
+            <label for="password" class="form-label">Contrase�a</label>
             <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña"
                    value="<%= (usuarioEditar != null) ? usuarioEditar.getPassword() : "" %>" required>
         </div>

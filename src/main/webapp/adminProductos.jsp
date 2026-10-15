@@ -11,7 +11,7 @@
 
 <div class="contenedor">
     <div class="barra-admin">
-        <h2>Administración de Productos / Servicios</h2>
+        <h2>Administracion de Productos / Servicios</h2>
         <a href="${pageContext.request.contextPath}/registroProductos.jsp" class="btn btn-primary">+ Nuevo Producto</a>
     </div>
 
@@ -21,9 +21,9 @@
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
-                <th>Categoría</th>
+                <th>Categori�a</th>
                 <th>Precio</th>
-                <th>Ubicación</th>
+                <th>Ubicacion</th>
                 <th>Disponible</th>
                 <th>Acciones</th>
             </tr>

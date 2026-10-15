@@ -30,7 +30,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="descripcion" class="form-label">Descripción</label>
+            <label for="descripcion" class="form-label">Descripcion</label>
             <textarea id="descripcion" name="descripcion" class="form-control" placeholder="Describe el producto o servicio turístico"><%= (productoEditar != null) ? productoEditar.getDescripcion() : "" %></textarea>
         </div>
 
@@ -41,7 +41,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="categoria" class="form-label">Categoría</label>
+            <label for="categoria" class="form-label">Categori�a</label>
             <select id="categoria" name="categoria" class="form-control">
                 <option value="Ecoturismo" <%= (productoEditar != null && "Ecoturismo".equals(productoEditar.getCategoria())) ? "selected" : "" %>>Ecoturismo</option>
                 <option value="Hospedaje" <%= (productoEditar != null && "Hospedaje".equals(productoEditar.getCategoria())) ? "selected" : "" %>>Hospedaje sostenible</option>
@@ -51,7 +51,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="ubicacion" class="form-label">Ubicación</label>
+            <label for="ubicacion" class="form-label">Ubicacion</label>
             <input type="text" id="ubicacion" name="ubicacion" class="form-control" placeholder="Ciudad / Región"
                    value="<%= (productoEditar != null) ? productoEditar.getUbicacion() : "" %>">
         </div>

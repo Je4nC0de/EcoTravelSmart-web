@@ -11,7 +11,7 @@
 
 <div class="contenedor">
     <div class="barra-admin">
-        <h2>Administración de Usuarios</h2>
+        <h2>Administracion de Usuarios</h2>
         <a href="${pageContext.request.contextPath}/registroUsuarios.jsp" class="btn btn-primary">+ Nuevo Usuario</a>
     </div>
 

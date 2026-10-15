@@ -2,7 +2,7 @@
 
 <div class="contenedor">
     <form class="formulario" action="${pageContext.request.contextPath}/LoginServlet" method="post">
-        <h2>Iniciar sesión</h2>
+        <h2>Iniciar sesion</h2>
 
         <% if (request.getAttribute("error") != null) { %>
             <div class="alert alert-danger"><%= request.getAttribute("error") %></div>
@@ -14,7 +14,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="password" class="form-label">Contraseña</label>
+            <label for="password" class="form-label">Contrase�aa</label>
             <input type="password" id="password" name="password" class="form-control" placeholder="Ingresa tu contraseña" required>
         </div>
 
@@ -23,8 +23,8 @@
         </div>
 
         <p style="text-align:center; margin-top:15px; font-size:14px;">
-            ¿No tienes cuenta?
-            <a href="${pageContext.request.contextPath}/registroUsuarios.jsp">Regístrate aquí</a>
+            �No tienes cuenta?
+            <a href="${pageContext.request.contextPath}/registroUsuarios.jsp">Regi�strate aquí</a>
         </p>
     </form>
 </div>
