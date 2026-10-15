@@ -1,9 +1,12 @@
 <%@include file="lib/header.jsp" %>
 
 <div class="contenedor">
-    <!-- Formulario no funcional por el momento, solo estructura y navegación -->
-    <form class="formulario" action="#" method="post">
+    <form class="formulario" action="${pageContext.request.contextPath}/LoginServlet" method="post">
         <h2>Iniciar sesión</h2>
+
+        <% if (request.getAttribute("error") != null) { %>
+            <div class="alert alert-danger"><%= request.getAttribute("error") %></div>
+        <% } %>
 
         <div class="mb-3">
             <label for="username" class="form-label">Usuario</label>

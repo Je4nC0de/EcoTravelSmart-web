@@ -1,4 +1,13 @@
+<%@page import="java.util.ArrayList" %>
+<%@page import="umariana.javaweb.ecotravelsmart.modelo.Usuario" %>
+<%@page import="umariana.javaweb.ecotravelsmart.modelo.GestionarUsuarios" %>
 <%@include file="lib/header.jsp" %>
+
+<%
+    GestionarUsuarios gestionarUsuarios =
+            (GestionarUsuarios) application.getAttribute("gestionarUsuarios");
+    ArrayList<Usuario> listaUsuarios = gestionarUsuarios.listarUsuarios();
+%>
 
 <div class="contenedor">
     <div class="barra-admin">
@@ -6,7 +15,7 @@
         <a href="${pageContext.request.contextPath}/registroUsuarios.jsp" class="btn btn-primary">+ Nuevo Usuario</a>
     </div>
 
-    <!-- Tabla con datos de ejemplo, aún no funcional / no conectada a datos reales -->
+    <!-- Tabla conectada a la lista real en memoria (GestionarUsuarios) a través del ServletContext -->
     <table class="table table-striped tabla-admin">
         <thead>
             <tr>
@@ -20,42 +29,27 @@
             </tr>
         </thead>
         <tbody>
+            <% for (Usuario u : listaUsuarios) { %>
             <tr>
-                <td>1</td>
-                <td>Laura</td>
-                <td>Martínez</td>
-                <td>laura.martinez@ecotravel.com</td>
-                <td>lmartinez</td>
-                <td>Administrador</td>
+                <td><%= u.getIdPersona() %></td>
+                <td><%= u.getNombre() %></td>
+                <td><%= u.getApellido() %></td>
+                <td><%= u.getCorreo() %></td>
+                <td><%= u.getUsername() %></td>
+                <td><%= u.getRol() %></td>
                 <td>
-                    <a href="registroUsuarios.jsp" class="btn btn-sm btn-primary">Editar</a>
-                    <a href="#" class="btn btn-sm btn-danger">Eliminar</a>
+                    <a href="registroUsuarios.jsp?id=<%= u.getIdPersona() %>" class="btn btn-sm btn-primary">Editar</a>
+                    <a href="${pageContext.request.contextPath}/UsuarioServlet?accion=eliminar&id=<%= u.getIdPersona() %>"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('¿Eliminar este usuario?');">Eliminar</a>
                 </td>
             </tr>
+            <% } %>
+            <% if (listaUsuarios.isEmpty()) { %>
             <tr>
-                <td>2</td>
-                <td>Carlos</td>
-                <td>Rodríguez</td>
-                <td>carlos.rodriguez@ecotravel.com</td>
-                <td>crodriguez</td>
-                <td>Cliente</td>
-                <td>
-                    <a href="registroUsuarios.jsp" class="btn btn-sm btn-primary">Editar</a>
-                    <a href="#" class="btn btn-sm btn-danger">Eliminar</a>
-                </td>
+                <td colspan="7" style="text-align:center;">No hay usuarios registrados todavía.</td>
             </tr>
-            <tr>
-                <td>3</td>
-                <td>Andrea</td>
-                <td>Pérez</td>
-                <td>andrea.perez@ecotravel.com</td>
-                <td>aperez</td>
-                <td>Cliente</td>
-                <td>
-                    <a href="registroUsuarios.jsp" class="btn btn-sm btn-primary">Editar</a>
-                    <a href="#" class="btn btn-sm btn-danger">Eliminar</a>
-                </td>
-            </tr>
+            <% } %>
         </tbody>
     </table>
 </div>

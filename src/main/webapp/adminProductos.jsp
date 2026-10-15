@@ -1,4 +1,13 @@
+<%@page import="java.util.ArrayList" %>
+<%@page import="umariana.javaweb.ecotravelsmart.modelo.Producto" %>
+<%@page import="umariana.javaweb.ecotravelsmart.modelo.GestionarProductos" %>
 <%@include file="lib/header.jsp" %>
+
+<%
+    GestionarProductos gestionarProductos =
+            (GestionarProductos) application.getAttribute("gestionarProductos");
+    ArrayList<Producto> listaProductos = gestionarProductos.listarProductos();
+%>
 
 <div class="contenedor">
     <div class="barra-admin">
@@ -6,7 +15,7 @@
         <a href="${pageContext.request.contextPath}/registroProductos.jsp" class="btn btn-primary">+ Nuevo Producto</a>
     </div>
 
-    <!-- Tabla con datos de ejemplo, aún no funcional / no conectada a datos reales -->
+    <!-- Tabla conectada a la lista real en memoria (GestionarProductos) a través del ServletContext -->
     <table class="table table-striped tabla-admin">
         <thead>
             <tr>
@@ -20,42 +29,27 @@
             </tr>
         </thead>
         <tbody>
+            <% for (Producto p : listaProductos) { %>
             <tr>
-                <td>1</td>
-                <td>Tour ecológico Laguna Verde</td>
-                <td>Ecoturismo</td>
-                <td>$85.000</td>
-                <td>Nariño</td>
-                <td>Sí</td>
+                <td><%= p.getIdProducto() %></td>
+                <td><%= p.getNombre() %></td>
+                <td><%= p.getCategoria() %></td>
+                <td>$<%= String.format("%,.0f", p.getPrecio()) %></td>
+                <td><%= p.getUbicacion() %></td>
+                <td><%= p.isDisponible() ? "Sí" : "No" %></td>
                 <td>
-                    <a href="registroProductos.jsp" class="btn btn-sm btn-primary">Editar</a>
-                    <a href="#" class="btn btn-sm btn-danger">Eliminar</a>
+                    <a href="registroProductos.jsp?id=<%= p.getIdProducto() %>" class="btn btn-sm btn-primary">Editar</a>
+                    <a href="${pageContext.request.contextPath}/ProductoServlet?accion=eliminar&id=<%= p.getIdProducto() %>"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('¿Eliminar este producto?');">Eliminar</a>
                 </td>
             </tr>
+            <% } %>
+            <% if (listaProductos.isEmpty()) { %>
             <tr>
-                <td>2</td>
-                <td>Cabañas Bosque Nativo</td>
-                <td>Hospedaje sostenible</td>
-                <td>$150.000</td>
-                <td>Putumayo</td>
-                <td>Sí</td>
-                <td>
-                    <a href="registroProductos.jsp" class="btn btn-sm btn-primary">Editar</a>
-                    <a href="#" class="btn btn-sm btn-danger">Eliminar</a>
-                </td>
+                <td colspan="7" style="text-align:center;">No hay productos registrados todavía.</td>
             </tr>
-            <tr>
-                <td>3</td>
-                <td>Transporte en bicicleta eléctrica</td>
-                <td>Transporte verde</td>
-                <td>$30.000</td>
-                <td>Pasto</td>
-                <td>No</td>
-                <td>
-                    <a href="registroProductos.jsp" class="btn btn-sm btn-primary">Editar</a>
-                    <a href="#" class="btn btn-sm btn-danger">Eliminar</a>
-                </td>
-            </tr>
+            <% } %>
         </tbody>
     </table>
 </div>

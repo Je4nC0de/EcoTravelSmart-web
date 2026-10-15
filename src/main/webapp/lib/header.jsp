@@ -19,7 +19,7 @@
 
 <header class="main-header">
     <div class="navbar">
-        <a href="${pageContext.request.contextPath}/index.jsp" class="logo">🌿 EcoTravelSmart</a>
+        <a href="${pageContext.request.contextPath}/index.jsp" class="logo">EcoTravelSmart</a>
         <nav>
             <a href="${pageContext.request.contextPath}/index.jsp">Inicio</a>
             <a href="${pageContext.request.contextPath}/adminProductos.jsp">Productos/Servicios</a>

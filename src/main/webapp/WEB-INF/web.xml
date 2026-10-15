@@ -6,6 +6,29 @@
 
     <display-name>EcoTravelSmart</display-name>
 
+    <!-- Fuerza UTF-8 en cada petición Y respuesta (filtro propio, ver
+         umariana.javaweb.ecotravelsmart.filters.EncodingFilter) -->
+    <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>umariana.javaweb.ecotravelsmart.filters.EncodingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- Asocia el idioma español con el encoding UTF-8 para las respuestas JSP -->
+    <locale-encoding-mapping-list>
+        <locale-encoding-mapping>
+            <locale>es</locale>
+            <encoding>UTF-8</encoding>
+        </locale-encoding-mapping>
+        <locale-encoding-mapping>
+            <locale>en</locale>
+            <encoding>UTF-8</encoding>
+        </locale-encoding-mapping>
+    </locale-encoding-mapping-list>
+
     <session-config>
         <session-timeout>
             30
