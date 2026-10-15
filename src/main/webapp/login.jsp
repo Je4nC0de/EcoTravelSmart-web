@@ -15,7 +15,7 @@
 
         <div class="mb-3">
             <label for="password" class="form-label">Contraseñaa</label>
-            <input type="password" id="password" name="password" class="form-control" placeholder="Ingresa tu contraseÃ±a" required>
+            <input type="password" id="password" name="password" class="form-control" placeholder="Ingresa tu contraseña" required>
         </div>
 
         <div class="acciones-form">
@@ -24,7 +24,7 @@
 
         <p style="text-align:center; margin-top:15px; font-size:14px;">
             ¿No tienes cuenta?
-            <a href="${pageContext.request.contextPath}/registroUsuarios.jsp">Regi­strate aquÃ­</a>
+            <a href="${pageContext.request.contextPath}/registroUsuarios.jsp">Regi­strate aqui­</a>
         </p>
     </form>
 </div>

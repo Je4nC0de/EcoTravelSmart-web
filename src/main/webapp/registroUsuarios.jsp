@@ -43,7 +43,7 @@
 
         <div class="mb-3">
             <label for="telefono" class="form-label">Telefono</label>
-            <input type="text" id="telefono" name="telefono" class="form-control" placeholder="NÃºmero de contacto"
+            <input type="text" id="telefono" name="telefono" class="form-control" placeholder="Numero de contacto"
                    value="<%= (usuarioEditar != null) ? usuarioEditar.getTelefono() : "" %>">
         </div>
 
@@ -55,7 +55,7 @@
 
         <div class="mb-3">
             <label for="password" class="form-label">Contraseña</label>
-            <input type="password" id="password" name="password" class="form-control" placeholder="ContraseÃ±a"
+            <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña"
                    value="<%= (usuarioEditar != null) ? usuarioEditar.getPassword() : "" %>" required>
         </div>
 
