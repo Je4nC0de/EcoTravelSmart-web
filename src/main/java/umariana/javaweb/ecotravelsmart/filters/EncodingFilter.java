@@ -2,43 +2,26 @@ package umariana.javaweb.ecotravelsmart.filters;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import java.io.IOException;
 
 /**
- * Filtro que fuerza UTF-8 tanto en la petición (request) como en la
- * respuesta (response) para TODAS las páginas de EcoTravelSmart.
+ * Fuerza UTF-8 al LEER los formularios y al ESCRIBIR las respuestas.
  *
- * Esto es necesario porque el filtro interno de Tomcat
- * (SetCharacterEncodingFilter) solo corrige el encoding de ENTRADA
- * (formularios), no el de SALIDA (el HTML que ve el navegador), que
- * era la causa real de los acentos y emojis rotos.
+ * IMPORTANTE: solo fija el juego de caracteres. NO cambia el Content-Type,
+ * porque si se forzara "text/html" también se aplicaría a style.css,
+ * app.js e imágenes, y el navegador rechazaría esos archivos (la página
+ * se vería sin estilos).
  */
 public class EncodingFilter implements Filter {
-
-    private static final String ENCODING = "UTF-8";
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        // Nada que inicializar
-    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-
-        request.setCharacterEncoding(ENCODING);
-        response.setCharacterEncoding(ENCODING);
-        response.setContentType("text/html; charset=" + ENCODING);
-
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         chain.doFilter(request, response);
-    }
-
-    @Override
-    public void destroy() {
-        // Nada que liberar
     }
 }

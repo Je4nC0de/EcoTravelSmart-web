@@ -7,14 +7,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
 import umariana.javaweb.ecotravelsmart.modelo.GestionarUsuarios;
 import umariana.javaweb.ecotravelsmart.modelo.Usuario;
+import umariana.javaweb.ecotravelsmart.util.Util;
 
-/**
- * Procesa el formulario de login.jsp.
- * Busca el usuario/contraseña en la lista en memoria (GestionarUsuarios).
- */
+/** Procesa el formulario de login.jsp e inicia la sesión. */
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 
@@ -22,28 +19,33 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        GestionarUsuarios gu = (GestionarUsuarios) getServletContext().getAttribute("gestionarUsuarios");
+        Usuario u = gu.autenticar(request.getParameter("username"), request.getParameter("password"));
 
-        GestionarUsuarios gestionarUsuarios =
-                (GestionarUsuarios) request.getServletContext().getAttribute("gestionarUsuarios");
-
-        Usuario encontrado = null;
-        ArrayList<Usuario> lista = gestionarUsuarios.listarUsuarios();
-        for (Usuario u : lista) {
-            if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
-                encontrado = u;
-                break;
-            }
+        if (u == null) {
+            request.setAttribute("error", "Usuario o contraseña incorrectos.");
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
+            return;
         }
 
-        if (encontrado != null) {
-            HttpSession session = request.getSession();
-            session.setAttribute("usuarioLogueado", encontrado);
-            response.sendRedirect(request.getContextPath() + "/index.jsp");
+        HttpSession vieja = request.getSession(false);
+        if (vieja != null) {
+            vieja.invalidate(); // nueva sesión al iniciar (evita fijación de sesión)
+        }
+        HttpSession session = request.getSession(true);
+        session.setAttribute("usuarioLogueado", u);
+        Util.flash(session, "success", "¡Bienvenido/a, " + u.getNombre() + "!");
+
+        String next = request.getParameter("next");
+        boolean nextValido = next != null && next.startsWith("/") && !next.startsWith("//")
+                && !next.contains("\\") && !next.contains("\r") && !next.contains("\n");
+
+        if (nextValido) {
+            response.sendRedirect(request.getContextPath() + next);
+        } else if ("Administrador".equals(u.getRol())) {
+            response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
         } else {
-            request.setAttribute("error", "Usuario o contraseña incorrectos.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/productos.jsp");
         }
     }
 

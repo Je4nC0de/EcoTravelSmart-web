@@ -1,74 +1,100 @@
-<%@page import="umariana.javaweb.ecotravelsmart.modelo.Producto" %>
-<%@page import="umariana.javaweb.ecotravelsmart.modelo.GestionarProductos" %>
-<%@include file="lib/header.jsp" %>
-
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="umariana.javaweb.ecotravelsmart.modelo.*" %>
 <%
-    // Si la URL trae ?id=X, venimos del botón "Editar": buscamos ese
-    // producto para precargar el formulario con sus datos actuales.
-    Producto productoEditar = null;
-    String idParam = request.getParameter("id");
+    request.setAttribute("tituloPagina", "Registro de producto");
+    request.setAttribute("navActivo", "adminProductos");
+%>
+<%@ include file="lib/header.jsp" %>
+<%
+    // Datos devueltos por el servlet tras un error, o producto a editar (?id=X)
+    Producto pf = (Producto) request.getAttribute("productoForm");
+    String errorForm = (String) request.getAttribute("error");
+    String idParam = Util.limpiar(request.getParameter("id"));
+    boolean esEdicion = !idParam.isEmpty();
 
-    if (idParam != null && !idParam.trim().isEmpty()) {
-        GestionarProductos gestionarProductos =
-                (GestionarProductos) application.getAttribute("gestionarProductos");
-        productoEditar = gestionarProductos.buscarProductoPorId(Integer.parseInt(idParam));
+    if (pf == null && esEdicion) {
+        try {
+            GestionarProductos gp = (GestionarProductos) application.getAttribute("gestionarProductos");
+            pf = gp.buscarProductoPorId(Integer.parseInt(idParam));
+        } catch (NumberFormatException e) {
+            pf = null;
+        }
+        if (pf == null) {
+            esEdicion = false;
+        }
     }
+    String vNombre = pf != null ? pf.getNombre() : "";
+    String vDesc = pf != null ? pf.getDescripcion() : "";
+    String vPrecio = pf != null && pf.getPrecio() >= 0 ? String.valueOf((long) pf.getPrecio()) : "";
+    String vCat = pf != null ? pf.getCategoria() : "Ecoturismo";
+    String vUbic = pf != null ? pf.getUbicacion() : "";
+    boolean vDisp = pf == null || pf.isDisponible();
 %>
 
-<div class="contenedor">
-    <!-- Formulario basado en los atributos de Producto.java -->
-    <form class="formulario" action="${pageContext.request.contextPath}/ProductoServlet" method="post">
-        <h2><%= (productoEditar != null) ? "Editar Producto / Servicio" : "Registro de Producto / Servicio" %></h2>
+<section class="page-hero">
+    <div class="container">
+        <h1><%= esEdicion ? "Editar producto / servicio" : "Nuevo producto / servicio" %></h1>
+        <p>Lo que registres aparecerá en el catálogo público.</p>
+    </div>
+</section>
 
-        <!-- Campo oculto: vacío = crear nuevo, con valor = actualizar ese id -->
-        <input type="hidden" name="id" value="<%= (productoEditar != null) ? productoEditar.getIdProducto() : "" %>">
+<div class="container page-body pb-4">
+    <div class="card-eco form-card">
 
-        <div class="mb-3">
-            <label for="nombre" class="form-label">Nombre del producto/servicio</label>
-            <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Ej: Tour ecológico Laguna Verde"
-                   value="<%= (productoEditar != null) ? productoEditar.getNombre() : "" %>" required>
-        </div>
+        <% if (errorForm != null) { %>
+        <div class="alert alert-danger"><i class="bi bi-exclamation-circle me-1"></i><%= Util.esc(errorForm) %></div>
+        <% } %>
 
-        <div class="mb-3">
-            <label for="descripcion" class="form-label">Descripcion</label>
-            <textarea id="descripcion" name="descripcion" class="form-control" placeholder="Describe el producto o servicio turístico"><%= (productoEditar != null) ? productoEditar.getDescripcion() : "" %></textarea>
-        </div>
+        <form action="<%= ctx %>/ProductoServlet" method="post" class="needs-validation" novalidate>
+            <input type="hidden" name="id" value="<%= esEdicion && pf != null ? pf.getIdProducto() : "" %>">
 
-        <div class="mb-3">
-            <label for="precio" class="form-label">Precio</label>
-            <input type="number" id="precio" name="precio" class="form-control" step="0.01" placeholder="0.00"
-                   value="<%= (productoEditar != null) ? productoEditar.getPrecio() : "" %>" required>
-        </div>
+            <div class="row g-3">
+                <div class="col-12">
+                    <label class="form-label" for="nombre">Nombre del producto / servicio</label>
+                    <input type="text" id="nombre" name="nombre" class="form-control" minlength="3" placeholder="Ej: Tour ecológico Laguna de La Cocha" value="<%= Util.esc(vNombre) %>" required>
+                    <div class="invalid-feedback">Escribe un nombre (mínimo 3 caracteres).</div>
+                </div>
+                <div class="col-12">
+                    <label class="form-label" for="descripcion">Descripción</label>
+                    <textarea id="descripcion" name="descripcion" rows="4" class="form-control" placeholder="Describe la experiencia..."><%= Util.esc(vDesc) %></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="precio">Precio por persona (COP)</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="number" id="precio" name="precio" class="form-control" min="0" step="1000" value="<%= vPrecio %>" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="categoria">Categoría</label>
+                    <select id="categoria" name="categoria" class="form-select">
+                        <% for (String[] c : Util.CATEGORIAS) { %>
+                        <option value="<%= c[0] %>" <%= c[0].equals(vCat) ? "selected" : "" %>><%= c[1] %></option>
+                        <% } %>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="ubicacion">Ubicación</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                        <input type="text" id="ubicacion" name="ubicacion" class="form-control" placeholder="Ciudad, región" value="<%= Util.esc(vUbic) %>">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="disponible">Disponibilidad</label>
+                    <select id="disponible" name="disponible" class="form-select">
+                        <option value="true" <%= vDisp ? "selected" : "" %>>Disponible</option>
+                        <option value="false" <%= !vDisp ? "selected" : "" %>>No disponible</option>
+                    </select>
+                </div>
+            </div>
 
-        <div class="mb-3">
-            <label for="categoria" class="form-label">Categori�a</label>
-            <select id="categoria" name="categoria" class="form-control">
-                <option value="Ecoturismo" <%= (productoEditar != null && "Ecoturismo".equals(productoEditar.getCategoria())) ? "selected" : "" %>>Ecoturismo</option>
-                <option value="Hospedaje" <%= (productoEditar != null && "Hospedaje".equals(productoEditar.getCategoria())) ? "selected" : "" %>>Hospedaje sostenible</option>
-                <option value="Transporte" <%= (productoEditar != null && "Transporte".equals(productoEditar.getCategoria())) ? "selected" : "" %>>Transporte verde</option>
-                <option value="Gastronomia" <%= (productoEditar != null && "Gastronomia".equals(productoEditar.getCategoria())) ? "selected" : "" %>>Gastronomía local</option>
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="ubicacion" class="form-label">Ubicacion</label>
-            <input type="text" id="ubicacion" name="ubicacion" class="form-control" placeholder="Ciudad / Región"
-                   value="<%= (productoEditar != null) ? productoEditar.getUbicacion() : "" %>">
-        </div>
-
-        <div class="mb-3">
-            <label for="disponible" class="form-label">Disponibilidad</label>
-            <select id="disponible" name="disponible" class="form-control">
-                <option value="true" <%= (productoEditar != null && productoEditar.isDisponible()) ? "selected" : "" %>>Disponible</option>
-                <option value="false" <%= (productoEditar != null && !productoEditar.isDisponible()) ? "selected" : "" %>>No disponible</option>
-            </select>
-        </div>
-
-        <div class="acciones-form">
-            <button type="submit" class="btn btn-primary"><%= (productoEditar != null) ? "Guardar cambios" : "Guardar" %></button>
-            <a href="${pageContext.request.contextPath}/adminProductos.jsp" class="btn btn-secondary">Cancelar</a>
-        </div>
-    </form>
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-primary btn-lg"><%= esEdicion ? "Guardar cambios" : "Crear producto" %></button>
+                <a href="<%= ctx %>/adminProductos.jsp" class="btn btn-light btn-lg">Cancelar</a>
+            </div>
+        </form>
+    </div>
 </div>
 
-<%@include file="lib/footer.jsp" %>
+<%@ include file="lib/footer.jsp" %>
