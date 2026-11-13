@@ -20,6 +20,14 @@ import umariana.javaweb.ecotravelsmart.util.Util;
 @WebServlet("/ProductoServlet")
 public class ProductoServlet extends HttpServlet {
 
+    private void guardarDatos() throws java.io.IOException {
+        jakarta.servlet.ServletContext c = getServletContext();
+        umariana.javaweb.ecotravelsmart.util.Persistencia.guardar(
+            (umariana.javaweb.ecotravelsmart.modelo.GestionarUsuarios)c.getAttribute("gestionarUsuarios"),
+            (umariana.javaweb.ecotravelsmart.modelo.GestionarProductos)c.getAttribute("gestionarProductos"),
+            (umariana.javaweb.ecotravelsmart.modelo.GestionarReservas)c.getAttribute("gestionarReservas"));
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -87,6 +95,7 @@ public class ProductoServlet extends HttpServlet {
             gp.agregarProducto(form);
             Util.flash(session, "success", "Producto creado correctamente.");
         }
+        guardarDatos();
         response.sendRedirect(ctx + "/adminProductos.jsp");
     }
 
@@ -102,6 +111,7 @@ public class ProductoServlet extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
             if ("eliminar".equals(accion)) {
                 if (gp.eliminarProducto(id)) {
+                    guardarDatos();
                     Util.flash(session, "success", "Producto eliminado.");
                 } else {
                     Util.flash(session, "danger", "El producto no existe.");
@@ -110,6 +120,7 @@ public class ProductoServlet extends HttpServlet {
                 Producto p = gp.buscarProductoPorId(id);
                 if (p != null) {
                     p.setDisponible(!p.isDisponible());
+                    guardarDatos();
                     Util.flash(session, "success", "\"" + p.getNombre() + "\" ahora está "
                             + (p.isDisponible() ? "disponible." : "no disponible."));
                 }

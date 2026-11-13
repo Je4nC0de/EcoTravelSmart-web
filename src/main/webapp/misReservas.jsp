@@ -71,6 +71,7 @@
                         <td class="fw-semibold"><%= Util.precio(r.getTotal()) %></td>
                         <td><span class="badge-soft <%= Util.badgeEstado(r.getEstado()) %>"><%= Util.esc(r.getEstado()) %></span></td>
                         <td class="text-end text-nowrap">
+                            <a href="<%= ctx %>/comprobante.jsp?id=<%= r.getIdReserva() %>" class="btn btn-sm btn-outline-primary" title="Ver comprobante"><i class="bi bi-receipt me-1"></i>Recibo</a>
                             <% if (sesionAdmin && "Pendiente".equals(r.getEstado())) { %>
                             <a href="<%= ctx %>/ReservaServlet?accion=confirmar&id=<%= r.getIdReserva() %>" class="btn btn-sm btn-outline-success" title="Confirmar"><i class="bi bi-check-lg"></i></a>
                             <% } %>

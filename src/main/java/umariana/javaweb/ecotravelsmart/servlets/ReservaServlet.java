@@ -24,6 +24,14 @@ import umariana.javaweb.ecotravelsmart.util.Util;
 @WebServlet("/ReservaServlet")
 public class ReservaServlet extends HttpServlet {
 
+    private void guardarDatos() throws java.io.IOException {
+        jakarta.servlet.ServletContext c = getServletContext();
+        umariana.javaweb.ecotravelsmart.util.Persistencia.guardar(
+            (umariana.javaweb.ecotravelsmart.modelo.GestionarUsuarios)c.getAttribute("gestionarUsuarios"),
+            (umariana.javaweb.ecotravelsmart.modelo.GestionarProductos)c.getAttribute("gestionarProductos"),
+            (umariana.javaweb.ecotravelsmart.modelo.GestionarReservas)c.getAttribute("gestionarReservas"));
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -54,10 +62,12 @@ public class ReservaServlet extends HttpServlet {
             } else if (fecha.isBefore(LocalDate.now())) {
                 Util.flash(session, "warning", "La fecha del viaje no puede estar en el pasado.");
             } else {
-                gr.agregarReserva(new Reserva(gr.siguienteId(), usuario.getIdPersona(), p.getIdProducto(),
+                int idNuevaReserva = gr.siguienteId();
+                gr.agregarReserva(new Reserva(idNuevaReserva, usuario.getIdPersona(), p.getIdProducto(),
                         fecha, personas, p.getPrecio() * personas, "Pendiente", LocalDate.now()));
+                guardarDatos();
                 Util.flash(session, "success", "¡Reserva creada! Quedó en estado Pendiente hasta que sea confirmada.");
-                response.sendRedirect(ctx + "/misReservas.jsp");
+                response.sendRedirect(ctx + "/comprobante.jsp?id=" + idNuevaReserva);
                 return;
             }
         } catch (NumberFormatException | DateTimeParseException e) {
@@ -82,12 +92,15 @@ public class ReservaServlet extends HttpServlet {
                 Util.flash(session, "danger", "La reserva no existe.");
             } else if ("cancelar".equals(accion) && (admin || r.getIdUsuario() == usuario.getIdPersona())) {
                 r.setEstado("Cancelada");
+                guardarDatos();
                 Util.flash(session, "success", "Reserva #" + r.getIdReserva() + " cancelada.");
             } else if ("confirmar".equals(accion) && admin) {
                 r.setEstado("Confirmada");
+                guardarDatos();
                 Util.flash(session, "success", "Reserva #" + r.getIdReserva() + " confirmada.");
             } else if ("eliminar".equals(accion) && admin) {
                 gr.eliminarReserva(r.getIdReserva());
+                guardarDatos();
                 Util.flash(session, "success", "Reserva eliminada.");
             } else {
                 Util.flash(session, "danger", "No tienes permisos para esa acción.");

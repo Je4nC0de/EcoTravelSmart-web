@@ -17,6 +17,7 @@ import umariana.javaweb.ecotravelsmart.modelo.Usuario;
  */
 @WebListener
 public class AppDataListener implements ServletContextListener {
+    private static final java.util.logging.Logger LOG = java.util.logging.Logger.getLogger(AppDataListener.class.getName());
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -60,6 +61,16 @@ public class AppDataListener implements ServletContextListener {
         reservas.agregarReserva(new Reserva(2, 3, 5, hoy.plusDays(20), 3, 210000, "Pendiente", hoy.minusDays(1)));
         reservas.agregarReserva(new Reserva(3, 2, 8, hoy.plusDays(5), 1, 60000, "Pendiente", hoy));
 
+        try {
+            if (umariana.javaweb.ecotravelsmart.util.Persistencia.existenDatos()) {
+                umariana.javaweb.ecotravelsmart.util.Persistencia.cargar(usuarios, productos, reservas);
+            } else {
+                umariana.javaweb.ecotravelsmart.util.Persistencia.guardar(usuarios, productos, reservas);
+            }
+        } catch (java.io.IOException e) {
+            LOG.log(java.util.logging.Level.SEVERE, "No se pudieron cargar los datos. Se cancela el inicio para evitar pérdidas.", e);
+            throw new IllegalStateException("Error de persistencia de EcoTravelSmart", e);
+        }
         sce.getServletContext().setAttribute("gestionarUsuarios", usuarios);
         sce.getServletContext().setAttribute("gestionarProductos", productos);
         sce.getServletContext().setAttribute("gestionarReservas", reservas);

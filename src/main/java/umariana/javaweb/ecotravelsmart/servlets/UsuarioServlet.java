@@ -24,6 +24,14 @@ public class UsuarioServlet extends HttpServlet {
         return u != null && "Administrador".equals(u.getRol());
     }
 
+    private void guardarDatos() throws java.io.IOException {
+        jakarta.servlet.ServletContext c = getServletContext();
+        umariana.javaweb.ecotravelsmart.util.Persistencia.guardar(
+            (umariana.javaweb.ecotravelsmart.modelo.GestionarUsuarios)c.getAttribute("gestionarUsuarios"),
+            (umariana.javaweb.ecotravelsmart.modelo.GestionarProductos)c.getAttribute("gestionarProductos"),
+            (umariana.javaweb.ecotravelsmart.modelo.GestionarReservas)c.getAttribute("gestionarReservas"));
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -86,6 +94,7 @@ public class UsuarioServlet extends HttpServlet {
 
         if (edicion) {
             gu.actualizarUsuario(form);
+            guardarDatos();
             if (actual != null && actual.getIdPersona() == id) {
                 session.setAttribute("usuarioLogueado", form);
             }
@@ -93,6 +102,7 @@ public class UsuarioServlet extends HttpServlet {
             response.sendRedirect(ctx + "/adminUsuarios.jsp");
         } else {
             gu.agregarUsuario(form);
+            guardarDatos();
             if (admin) {
                 Util.flash(session, "success", "Usuario creado correctamente.");
                 response.sendRedirect(ctx + "/adminUsuarios.jsp");
@@ -142,6 +152,7 @@ public class UsuarioServlet extends HttpServlet {
                 if (id == actual.getIdPersona()) {
                     Util.flash(session, "warning", "No puedes eliminar tu propia cuenta mientras estás conectado.");
                 } else if (gu.eliminarUsuario(id)) {
+                    guardarDatos();
                     Util.flash(session, "success", "Usuario eliminado.");
                 } else {
                     Util.flash(session, "danger", "El usuario no existe.");
