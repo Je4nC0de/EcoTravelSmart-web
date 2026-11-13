@@ -93,14 +93,16 @@ public class UsuarioServlet extends HttpServlet {
         }
 
         if (edicion) {
-            gu.actualizarUsuario(form);\n            guardarDatos();
+            gu.actualizarUsuario(form);
+            guardarDatos();
             if (actual != null && actual.getIdPersona() == id) {
                 session.setAttribute("usuarioLogueado", form);
             }
             Util.flash(session, "success", "Usuario actualizado correctamente.");
             response.sendRedirect(ctx + "/adminUsuarios.jsp");
         } else {
-            gu.agregarUsuario(form);\n            guardarDatos();
+            gu.agregarUsuario(form);
+            guardarDatos();
             if (admin) {
                 Util.flash(session, "success", "Usuario creado correctamente.");
                 response.sendRedirect(ctx + "/adminUsuarios.jsp");
@@ -149,7 +151,8 @@ public class UsuarioServlet extends HttpServlet {
                 int id = Integer.parseInt(request.getParameter("id"));
                 if (id == actual.getIdPersona()) {
                     Util.flash(session, "warning", "No puedes eliminar tu propia cuenta mientras estás conectado.");
-                } else if (gu.eliminarUsuario(id)) {\n                    guardarDatos();
+                } else if (gu.eliminarUsuario(id)) {
+                    guardarDatos();
                     Util.flash(session, "success", "Usuario eliminado.");
                 } else {
                     Util.flash(session, "danger", "El usuario no existe.");
